@@ -1,0 +1,299 @@
+%% AIML Engineering Lab - Project Report (v3)
+%% Placeholders are replaced by generate_content.py
+\documentclass[11pt,a4paper]{article}
+
+\usepackage[a4paper, margin=2cm, top=2.2cm, bottom=2cm]{geometry}
+\usepackage[T1]{fontenc}
+\usepackage[utf8]{inputenc}
+\usepackage{lmodern}
+\usepackage{microtype}
+\usepackage{setspace}
+\usepackage{graphicx}
+\usepackage{xcolor}
+\usepackage{colortbl}
+\usepackage{amsmath}
+\usepackage{booktabs}
+\usepackage{tabularx}
+\usepackage{array}
+\usepackage{enumitem}
+\usepackage{fancyhdr}
+\usepackage{titlesec}
+\usepackage{hyperref}
+\usepackage{float}
+\usepackage{caption}
+\usepackage{subcaption}
+\usepackage{tikz}
+\usepackage{tcolorbox}
+\usepackage{needspace}
+\tcbuselibrary{skins,breakable}
+\usetikzlibrary{arrows.meta, positioning}
+
+%% ── Colour palette ─────────────────────────────────────────────────────────
+\definecolor{primary}{HTML}{1A1A2E}
+\definecolor{accent}{HTML}{0F3460}
+\definecolor{codemuted}{HTML}{6B7280}
+\definecolor{metricgreen}{HTML}{16A34A}
+\definecolor{tableheader}{HTML}{D0E8F7}
+\definecolor{tablerow}{HTML}{EBF5FB}
+\definecolor{lightblue}{HTML}{F0F7FC}
+
+\hypersetup{
+  colorlinks=true,
+  linkcolor=accent,
+  urlcolor=accent,
+  citecolor=accent,
+  pdftitle={Tree-Based Learning: Decision Trees \& Random Forests},
+  pdfauthor={AIML Engineering Lab},
+}
+
+\setstretch{1.18}
+\setlength{\parskip}{6pt}
+\setlength{\parindent}{0pt}
+
+\titleformat{\section}
+  {\large\bfseries\color{accent}}
+  {\thesection}{1em}{}[\color{tableheader}\titlerule]
+\titleformat{\subsection}
+  {\normalsize\bfseries\color{primary}}
+  {\thesubsection}{0.8em}{}
+\titlespacing{\section}{0pt}{16pt}{6pt}
+\titlespacing{\subsection}{0pt}{10pt}{4pt}
+
+\pagestyle{fancy}
+\fancyhf{}
+\fancyhead[L]{\small\color{codemuted}Project 003}
+\fancyhead[R]{\small\color{codemuted}Tree-Based Learning: Decision Trees \& Random Forests}
+\fancyfoot[C]{\small\color{codemuted}\thepage}
+\renewcommand{\headrulewidth}{0.2pt}
+
+\newtcolorbox{resultbox}{
+  colback=lightblue, colframe=tableheader,
+  boxrule=0.4pt, arc=4pt, left=10pt, right=10pt, top=6pt, bottom=6pt
+}
+
+\begin{document}
+
+%% ── COVER PAGE ─────────────────────────────────────────────────────────────
+\thispagestyle{empty}
+
+\begin{tikzpicture}[remember picture, overlay]
+  \fill[primary] (current page.north west)
+    rectangle ([yshift=-48pt]current page.north east);
+\end{tikzpicture}
+
+\vspace*{22pt}
+{\color{white}\large\bfseries AIML Engineering Lab}
+
+\vspace{50pt}
+
+\begin{flushright}
+  {\fontsize{9}{11}\selectfont\color{codemuted}PROJECT 003}
+\end{flushright}
+
+{\fontsize{26}{32}\selectfont\bfseries\color{primary} Tree-Based Learning: Decision Trees \& Random Forests}
+
+\vspace{6pt}
+{\large\color{accent} Leveraging tree-based models to predict critical failures in battery and semiconductor manufacturing processes.}
+
+\vspace{14pt}
+{\color{tableheader}\rule{\linewidth}{0.6pt}}
+
+\vspace{16pt}
+This project explores Decision Trees and Random Forests in predicting rare events for lithium-ion batteries and semiconductor wafers. By utilizing ensemble learning and feature engineering, we achieved high accuracy in detecting potential failures, demonstrating the power of tree-based models in complex prediction scenarios.
+
+\vspace{12pt}
+\begin{resultbox}
+  \textbf{\color{accent}Key Result}\quad
+  {\large\bfseries\color{metricgreen}AUC: 1.0000 for the Random Forest on the EV Battery dataset}
+\end{resultbox}
+
+\vfill
+
+\begin{tabularx}{\linewidth}{@{}>{\bfseries}l X @{}}
+  \arrayrulecolor{tableheader}
+  \toprule
+  \rowcolor{tableheader} Info & Detail \\
+  \midrule
+  \rowcolor{white} GitHub & \href{https://github.com/AIML-Engineering-Lab/003_tree_based_learning}{\nolinkurl{https://github.com/AIML-Engineering-Lab/003_tree_based_learning}} \\
+  \rowcolor{tablerow} Tech Stack & Python 3.11, scikit-learn, pandas, Matplotlib \\
+  \rowcolor{white} Licence & MIT \\
+  \bottomrule
+\end{tabularx}
+
+\newpage
+
+%% ── 1. PROJECT OVERVIEW ────────────────────────────────────────────────────
+\section{Project Overview}
+
+This project addresses critical prediction challenges in two real-world applications: lithium-ion battery thermal runaway prediction and wafer edge yield drop-off evaluation. It highlights the nuances of predicting rare events—like battery failures occurring in only 5\% of cases—where traditional models may struggle. The approach leverages Decision Trees for their interpretability and Random Forests for their robustness, effectively managing class imbalance and enhancing prediction accuracy through ensemble learning. The study showcases comprehensive EDA, hyperparameter tuning, and evaluation metrics including ROC-AUC to provide deep insights into model performance.
+
+In the first dataset concerning EV battery predictions, key features included charge rate, ambient temperature, cooling flow, voltage variance, and age cycles—factors known to influence thermal runaway incidents. In the second dataset, semiconductor yield drop-off modeling involved spatial assessments based on die position and process variables. By implementing distinct algorithms—Decision Trees and Random Forests—and optimizing their parameters, we achieved remarkable predictive capabilities. The results indicated AUC values consistently above 0.99 for Random Forest models, underscoring their effectiveness in solving these classification challenges.
+
+\subsection{Key Concepts}
+
+\textbf{Decision Tree:} A model that makes predictions based on a series of decision rules derived from the features, providing human-readable insights into how decisions are made.
+
+\textbf{Random Forest:} An ensemble method that builds multiple decision trees to improve predictive performance and reduce the risk of overfitting by averaging results from various trees.
+
+\textbf{Feature Importance:} A metric indicating how much a feature contributes to the model's accuracy, helping to identify the most influential factors in predictions.
+
+\textbf{Class Imbalance:} A scenario where the target class distribution is uneven, necessitating techniques like class weights to ensure the model doesn't favor the majority class.
+
+\textbf{ROC-AUC:} A performance measurement for classification models that plots the true positive rate against the false positive rate, providing insight into the model's ability to differentiate between classes.
+
+
+%% ── 2. DATASETS ────────────────────────────────────────────────────────────
+\needspace{14\baselineskip}
+\section{Datasets}
+
+\subsection{EV Battery Thermal Runaway Prediction}
+
+\begin{tabularx}{\linewidth}{@{}>{\bfseries}l X @{}}
+  \arrayrulecolor{tableheader}
+  \toprule
+  \rowcolor{tableheader} Property & Value \\
+  \midrule
+  \rowcolor{white} Description & This dataset consists of conditions affecting lithium-ion batteries, primarily focusing on the likelihood of thermal runaway incidents. It underscores the striking effects of environmental and operational parameters on battery safety and is pivotal for enhancing battery management systems. \\
+  \rowcolor{tablerow} Total Rows & 8,000 \\
+  \rowcolor{white} Columns & 6 columns (5 features + 1 target) \\
+  \rowcolor{tablerow} Features & charge\_rate\_kw, ambient\_temp\_c, cooling\_flow\_rate, cell\_voltage\_variance, age\_cycles \\
+  \rowcolor{white} Class Balance & Class imbalance: 95\% Safe, 5\% Fire \\
+  \rowcolor{tablerow} Train / Test Split & 80\% train / 20\% test \\
+  \bottomrule
+\end{tabularx}
+
+\vspace{10pt}
+
+\subsection{Wafer Edge Yield Drop-off}
+
+\begin{tabularx}{\linewidth}{@{}>{\bfseries}l X @{}}
+  \arrayrulecolor{tableheader}
+  \toprule
+  \rowcolor{tableheader} Property & Value \\
+  \midrule
+  \rowcolor{white} Description & The wafer yield dataset captures critical parameters influencing the outcome of semiconductor die on silicon wafers. It reflects the unique spatial patterns affecting yield, especially in edge regions, crucial for manufacturing efficiency and quality control. \\
+  \rowcolor{tablerow} Total Rows & 10,000 \\
+  \rowcolor{white} Columns & 6 columns (5 features + 1 target) \\
+  \rowcolor{tablerow} Features & distance\_from\_center\_mm, angle\_degrees, etch\_gas\_flow, spin\_coat\_rpm, litho\_overlay\_error\_nm \\
+  \rowcolor{white} Class Balance & Class imbalance: \textasciitilde{}90\% Pass, \textasciitilde{}10\% Fail \\
+  \rowcolor{tablerow} Train / Test Split & 80\% train / 20\% test \\
+  \bottomrule
+\end{tabularx}
+
+%% ── 3. METHODOLOGY ─────────────────────────────────────────────────────────
+\section{Methodology}
+
+\subsection{Algorithms Used}
+
+\begin{tabularx}{\linewidth}{@{}>{\bfseries}l X @{}}
+  \arrayrulecolor{tableheader}
+  \toprule
+  \rowcolor{tableheader} Algorithm & Description \\
+  \midrule
+  \rowcolor{white} Decision Tree & This algorithm constructs a tree structure where each branch represents decisions based on feature conditions, enabling clear interpretation of results, especially vital for safety-critical applications like battery management. \\
+  \rowcolor{tablerow} Random Forest & Utilized to enhance prediction precision through ensemble learning, Random Forest mitigates the weaknesses of single decision trees, particularly overfitting, and captures complex interactions among features. \\
+  \bottomrule
+\end{tabularx}
+
+\subsection{Processing Pipeline}
+
+The project begins with data loading from the respective CSV files, ensuring accessibility for subsequent processing. Exploratory Data Analysis (EDA) is conducted to understand distributions, relationships, and potential imbalances within the datasets, particularly focusing on the rarity of failure events.
+
+Following this, a careful preprocessing phase is implemented, including stratified splitting to maintain class distributions in both training and testing datasets, thus preserving the critical rare-event structure. Essential feature scaling or selection techniques are applied to enhance model performance.
+
+The core of the analysis involves training the Decision Tree model first as an interpretable baseline, with careful tuning of hyperparameters such as max\_depth and min\_samples\_leaf to prevent overfitting. Subsequently, the Random Forest algorithm is employed, integrating multiple decision trees trained on random subsets of the data to refine prediction parameters further.
+
+Evaluation of both models is executed using metrics tailored to the class balance challenges, emphasizing ROC-AUC scores to assess the predictive capabilities appropriately. Results are then compared to highlight the benefits of ensemble methods over naive approaches based solely on single decision trees.
+
+%% ── 4. RESULTS ─────────────────────────────────────────────────────────────
+\section{Results}
+
+The evaluation results unequivocally demonstrate that the Random Forest model outperformed the Decision Tree, achieving AUC values approaching 1, whereas the Decision Tree struggled under class imbalance pressures. This discrepancy indicates that the Random Forest's averaging effect is essential in capturing the nuanced relationships in data where failures are rare. Moreover, the analysis of feature importance signals that factors like ambient temperature and cooling rates play crucial roles in predicting battery fire risks, while spatial parameters significantly influence semiconductor yield, revealing actionable insights for both industries.
+
+\vspace{6pt}
+
+\begin{tabularx}{\linewidth}{@{}>{\bfseries}l X @{}}
+  \arrayrulecolor{tableheader}
+  \toprule
+  \rowcolor{tableheader} Metric & Value \\
+  \midrule
+  \rowcolor{white} AUC (EV Battery) & 1.0000 \\
+  \rowcolor{tablerow} AUC (Wafer Yield) & 0.7690 \\
+  \bottomrule
+\end{tabularx}
+
+\vspace{8pt}
+\begin{resultbox}
+  \textbf{\color{accent}Best Result}\quad {\bfseries\color{metricgreen}AUC: 1.0000 for the Random Forest on the EV Battery dataset}
+\end{resultbox}
+
+%% ── 5. VISUALISATIONS ──────────────────────────────────────────────────────
+\section{Visualisations}
+
+\begin{figure}[H]
+  \centering
+  \includegraphics[width=\linewidth]{/Users/rajendarmuddasani/AIML/55_LinkedIn/003_tree_based_learning/assets/decision_tree_ev.png}
+\end{figure}
+
+\begin{figure}[H]
+  \centering
+  \includegraphics[width=\linewidth]{/Users/rajendarmuddasani/AIML/55_LinkedIn/003_tree_based_learning/assets/eda_ev_battery.png}
+\end{figure}
+
+The first two visualizations depict the structure of the Decision Tree and show the growth of its rules over the first three levels, making the decision process comprehensible. The second visualization contrasts the actual wafer yield map with the predicted probabilities from the Random Forest model, illustrating its ability to capture the spatial patterns that contribute to yield drop-offs.
+
+\begin{figure}[H]
+  \centering
+  \includegraphics[width=\linewidth]{/Users/rajendarmuddasani/AIML/55_LinkedIn/003_tree_based_learning/assets/feature_importance_ev.png}
+\end{figure}
+
+\begin{figure}[H]
+  \centering
+  \includegraphics[width=\linewidth]{/Users/rajendarmuddasani/AIML/55_LinkedIn/003_tree_based_learning/assets/fig1_decision_tree_structure.png}
+\end{figure}
+
+The next two visualizations focus on ROC curves for both models across datasets, revealing how the Random Forest consistently outperforms the Decision Tree. The fourth figure emphasizes the AUC differences, showcasing the model's effectiveness in handling class imbalance, particularly in high-stakes scenarios such as predicting battery failures, where precision is critical.
+
+%% ── 6. DEPLOYMENT ──────────────────────────────────────────────────────────
+\section{Deployment \& Tech Stack}
+
+Deployment involves producing a retrainable model package that can be implemented in real-time battery management and semiconductor quality assurance systems. These models can be integrated into cloud-based platforms for continuous learning and updating with incoming data, thereby improving resilience against future predictive accuracy challenges.
+
+\subsection{Quick Start}
+
+\begin{verbatim}
+git clone https://github.com/AIML-Engineering-Lab/003_tree_based_learning
+docker compose up --build
+\end{verbatim}
+
+\subsection{Tech Stack}
+
+\begin{tabularx}{\linewidth}{@{}>{\bfseries}l X @{}}
+  \arrayrulecolor{tableheader}
+  \toprule
+  \rowcolor{tableheader} Info & Detail \\
+  \midrule
+  \rowcolor{white} GitHub & \href{https://github.com/AIML-Engineering-Lab/003_tree_based_learning}{\nolinkurl{https://github.com/AIML-Engineering-Lab/003_tree_based_learning}} \\
+  \rowcolor{tablerow} Tech Stack & Python 3.11, scikit-learn, pandas, Matplotlib \\
+  \rowcolor{white} Licence & MIT \\
+  \bottomrule
+\end{tabularx}
+
+%% ── 7. KEY LEARNINGS ───────────────────────────────────────────────────────
+\section{Key Learnings}
+
+\begin{itemize}[leftmargin=18pt,itemsep=4pt]
+  \item Tree-based models excel in scenarios with complex decision boundaries, particularly for rare-event predictions.
+  \item Ensemble learning techniques, such as Random Forests, significantly reduce overfitting risks associated with individual tree models, enhancing predictive robustness.
+  \item Understanding feature importance derived from these models enables better physical insight into the factors leading to failures, guiding future experimental focus.
+\end{itemize}
+
+%% ── 8. FUTURE WORK ─────────────────────────────────────────────────────────
+\section{Future Work}
+
+\begin{itemize}[leftmargin=18pt,itemsep=4pt]
+  \item Integrating Gradient Boosting methods to further improve prediction accuracy and robustness, particularly in high-dimensional spaces.
+  \item Exploring hyperparameter optimization techniques like Grid Search and Random Search to refine model performance and generalization capabilities.
+\end{itemize}
+
+\end{document}
