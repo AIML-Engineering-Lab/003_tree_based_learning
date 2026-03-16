@@ -1,8 +1,8 @@
-%% AIML Engineering Lab - Project Report (v4)
+%% AIML Engineering Lab - Project Report (v5)
 %% Placeholders are replaced by generate_content.py
 \documentclass[11pt,a4paper]{article}
 
-\usepackage[a4paper, margin=2cm, top=2cm, bottom=2cm]{geometry}
+\usepackage[a4paper, margin=2cm, top=1.5cm, bottom=1.5cm]{geometry}
 \usepackage[T1]{fontenc}
 \usepackage[utf8]{inputenc}
 \usepackage{lmodern}
@@ -21,16 +21,16 @@
 \usepackage{hyperref}
 \usepackage{float}
 \usepackage{caption}
-\usepackage{tikz}
 \usepackage{tcolorbox}
 \usepackage{needspace}
 \tcbuselibrary{skins,breakable}
-\usetikzlibrary{arrows.meta, positioning}
 
 %% ── Colour palette ─────────────────────────────────────────────────────────
 \definecolor{primary}{HTML}{1A1A2E}
 \definecolor{accent}{HTML}{0F3460}
 \definecolor{titleblue}{HTML}{2E86C1}
+\definecolor{headingblue}{HTML}{2196F3}
+\definecolor{subheadblue}{HTML}{42A5F5}
 \definecolor{codemuted}{HTML}{6B7280}
 \definecolor{metricgreen}{HTML}{16A34A}
 \definecolor{tableheader}{HTML}{D0E8F7}
@@ -42,33 +42,33 @@
   linkcolor=accent,
   urlcolor=accent,
   citecolor=accent,
-  pdftitle={Tree-Based Learning: Decision Trees \& Random Forests},
+  pdftitle={Tree-Based Learning},
   pdfauthor={AIML Engineering Lab},
 }
 
-\setstretch{1.12}
-\setlength{\parskip}{5pt}
+\setstretch{1.08}
+\setlength{\parskip}{3pt}
 \setlength{\parindent}{0pt}
 
 \titleformat{\section}
-  {\large\bfseries\color{accent}}
+  {\large\bfseries\color{headingblue}}
   {\thesection}{1em}{}[\color{tableheader}\titlerule]
 \titleformat{\subsection}
-  {\normalsize\bfseries\color{primary}}
+  {\normalsize\bfseries\color{subheadblue}}
   {\thesubsection}{0.8em}{}
-\titlespacing{\section}{0pt}{12pt}{4pt}
-\titlespacing{\subsection}{0pt}{8pt}{3pt}
+\titlespacing{\section}{0pt}{8pt}{3pt}
+\titlespacing{\subsection}{0pt}{6pt}{2pt}
 
 \pagestyle{fancy}
 \fancyhf{}
 \fancyhead[L]{\small\color{codemuted}Project 003}
-\fancyhead[R]{\small\color{codemuted}Tree-Based Learning: Decision Trees \& Random Forests}
+\fancyhead[R]{\small\color{codemuted}Tree-Based Learning}
 \fancyfoot[C]{\small\color{codemuted}\thepage}
 \renewcommand{\headrulewidth}{0.2pt}
 
 \newtcolorbox{resultbox}{
   colback=lightblue, colframe=tableheader,
-  boxrule=0.4pt, arc=4pt, left=10pt, right=10pt, top=4pt, bottom=4pt
+  boxrule=0.4pt, arc=4pt, left=10pt, right=10pt, top=3pt, bottom=3pt
 }
 
 \begin{document}
@@ -76,65 +76,55 @@
 %% ── PAGE 1: Title + Overview ───────────────────────────────────────────────
 \thispagestyle{empty}
 
-\begin{tikzpicture}[remember picture, overlay]
-  \fill[primary] (current page.north west)
-    rectangle ([yshift=-32pt]current page.north east);
-\end{tikzpicture}
+{\colorbox{primary}{\makebox[\dimexpr\linewidth-2\fboxsep][l]{\color{white}\bfseries\normalsize\hspace{6pt}AIML Engineering Lab}}}
 
-\vspace*{6pt}
-{\color{white}\normalsize\bfseries AIML Engineering Lab}
-
-\vspace{18pt}
+\vspace{6pt}
 
 {\fontsize{9}{11}\selectfont\color{codemuted}PROJECT 003}
 
+\vspace{1pt}
+{\fontsize{22}{27}\selectfont\bfseries\color{titleblue} Tree-Based Learning}
+
 \vspace{2pt}
-{\fontsize{24}{30}\selectfont\bfseries\color{titleblue} Tree-Based Learning: Decision Trees \& Random Forests}
+{\normalsize\color{accent} Mastering prediction with Decision Trees and Random Forests for rare events.}
 
-\vspace{3pt}
-{\normalsize\color{accent} This project explores tree-based models to solve complex real-world prediction problems through ensemble learning.}
-
-\vspace{6pt}
+\vspace{4pt}
 {\color{tableheader}\rule{\linewidth}{0.4pt}}
 
-\vspace{6pt}
+\vspace{3pt}
 
 \section{Project Overview}
 
-In this project, I tackle the crucial issue of rare event prediction using tree-based models, specifically Decision Trees and Random Forests. The first scenario focuses on predicting thermal runaway in lithium-ion batteries under various charging and environmental conditions. This problem is critical because thermal runaway can lead to catastrophic fires, and understanding the multifaceted, non-linear interactions among variables is vital. Using Decision Trees, I can interpret the decision-making process, while Random Forests mitigate the risk of overfitting by averaging multiple trees, providing a robust predictive performance. The second scenario addresses yield drop-off in wafers during post-silicon validation. Here, I forecast the chances of passing yield testing based on spatial and process parameters, revealing the sophisticated edge drop-off phenomenon common in semiconductor manufacturing.
+I tackle EV battery thermal runaway and wafer yield prediction using Decision Trees and Random Forests. By leveraging ensemble learning, I enhance predictive performance significantly. The models are carefully tuned and evaluated, achieving AUC values up to 1.0000 for the battery dataset and robust results for wafer predictions.
 
-By employing both models, I achieved high accuracy with ROC-AUC scores primarily between 0.99 and 0.76 across different configurations. The models excelled due to effective handling of class imbalance—particularly critical in the battery failure dataset—using class weighting and stratified sampling, ensuring the reliability and relevance of my predictions in real-world applications.
+\textbf{Decision Tree:} Creates interpretable IF-THEN rules through data splitting.
 
-\subsection{Key Concepts}
+\textbf{Random Forest:} Combines multiple trees to reduce variance and improve accuracy.
 
-\textbf{Decision Tree:} A Decision Tree builds a model using a series of recursive splits to learn multi-condition rules and is particularly useful for interpreting complex decision boundaries in human-readable form.
+\textbf{Feature Importance:} Identifies which features best predict outcomes across trees.
 
-\textbf{Random Forest:} Random Forest creates an ensemble of multiple Decision Trees, utilizing bagging and feature randomness to improve predictive accuracy and reduce overfitting by averaging the predictions.
+\textbf{Class Imbalance:} Addresses skewed classes using balanced weights during training.
 
-\textbf{Feature Importance:} This metric indicates the contribution of each feature to predicting the target variable, allowing me to understand which factors are most influential in my predictions.
-
-\textbf{Class Imbalance Handling:} To address class imbalance, I applied the `class\_weight='balanced'`, allowing the model to pay appropriate attention to rare classes, thereby improving detection rates of critical events.
-
-\textbf{ROC-AUC:} The ROC-AUC metric measures the performance of a classification model at all classification thresholds, serving as a comprehensive indicator of model efficacy, especially in imbalanced datasets.
+\textbf{Ensemble Learning:} Multiple weak learners outperform a single strong learner through averaging.
 
 
 %% ── DATASETS ───────────────────────────────────────────────────────────────
-\needspace{12\baselineskip}
+\needspace{8\baselineskip}
 \section{Datasets}
 
-\subsection{EV Battery Thermal Runaway Prediction}
+\subsection{EV Battery Thermal Runaway}
 
 \begin{tabularx}{\linewidth}{@{}>{\bfseries}l X @{}}
   \arrayrulecolor{tableheader}
   \toprule
   \rowcolor{tableheader} Property & Value \\
   \midrule
-  \rowcolor{white} Description & This dataset consists of 8,000 records capturing the characteristics of lithium-ion batteries under various charging and environmental conditions, designed for predicting whether a battery will experience thermal runaway. The dataset was carefully constructed to reflect real-world scenarios where such failures might occur. \\
+  \rowcolor{white} Description & Predicts fire risk in lithium-ion batteries based on various charging conditions. \\
   \rowcolor{tablerow} Total Rows & 8,000 \\
-  \rowcolor{white} Columns & 6 columns (5 features + 1 target) \\
-  \rowcolor{tablerow} Features & `charge\_rate\_kw`, `ambient\_temp\_c`, `cooling\_flow\_rate`, `cell\_voltage\_variance`, `age\_cycles` \\
-  \rowcolor{white} Class Balance & Class ratio: \textasciitilde{}95\% Safe to \textasciitilde{}5\% Fire \\
-  \rowcolor{tablerow} Train / Test Split & 80\% train / 20\% test \\
+  \rowcolor{white} Columns & 6 (5 features + 1 target) \\
+  \rowcolor{tablerow} Features & charge\_rate\_kw, ambient\_temp\_c, cooling\_flow\_rate, cell\_voltage\_variance, age\_cycles \\
+  \rowcolor{white} Class Balance & Imbalanced, \textasciitilde{}5\% fire risk \\
+  \rowcolor{tablerow} Train / Test Split & 80/20 \\
   \bottomrule
 \end{tabularx}
 
@@ -147,12 +137,12 @@ By employing both models, I achieved high accuracy with ROC-AUC scores primarily
   \toprule
   \rowcolor{tableheader} Property & Value \\
   \midrule
-  \rowcolor{white} Description & This dataset comprises 10,000 entries detailing the yield outcomes of silicon wafers' dies, with an emphasis on their spatial positions and various process parameters. It serves to illustrate the complex yield drop-off phenomena in semiconductor manufacturing. \\
+  \rowcolor{white} Description & Predicts yield pass/fail of silicon dies based on spatial and process parameters. \\
   \rowcolor{tablerow} Total Rows & 10,000 \\
-  \rowcolor{white} Columns & 6 columns (5 features + 1 target) \\
-  \rowcolor{tablerow} Features & `distance\_from\_center\_mm`, `angle\_degrees`, `etch\_gas\_flow`, `spin\_coat\_rpm`, `litho\_overlay\_error\_nm` \\
-  \rowcolor{white} Class Balance & Class ratio: \textasciitilde{}90\% Pass to \textasciitilde{}10\% Fail \\
-  \rowcolor{tablerow} Train / Test Split & 80\% train / 20\% test \\
+  \rowcolor{white} Columns & 6 (5 features + 1 target) \\
+  \rowcolor{tablerow} Features & distance\_from\_center\_mm, angle\_degrees, etch\_gas\_flow, spin\_coat\_rpm, litho\_overlay\_error\_nm \\
+  \rowcolor{white} Class Balance & Imbalanced, \textasciitilde{}10\% fail rate \\
+  \rowcolor{tablerow} Train / Test Split & 80/20 \\
   \bottomrule
 \end{tabularx}
 
@@ -166,27 +156,17 @@ By employing both models, I achieved high accuracy with ROC-AUC scores primarily
   \toprule
   \rowcolor{tableheader} Algorithm & Description \\
   \midrule
-  \rowcolor{white} Decision Tree & I used a Decision Tree as a baseline model due to its interpretability, providing clear, if-then rules to understand predictions of battery failures effectively. \\
-  \rowcolor{tablerow} Random Forest & The Random Forest algorithm was employed as an ensemble method to enhance predictive performance by aggregating the results of many Decision Trees, defeating overfitting issues common to single trees. \\
+  \rowcolor{white} Decision Tree & Provides an interpretable baseline model for prediction. \\
+  \rowcolor{tablerow} Random Forest & Enhances accuracy through ensemble learning and variance reduction. \\
   \bottomrule
 \end{tabularx}
 
-\subsection{Processing Pipeline}
-
-The pipeline commenced with data loading from CSV files into Pandas DataFrames, which facilitated exploratory data analysis (EDA) to visualize feature distributions and understand class imbalances. For the EV Battery dataset, careful stratified splitting ensured the minority class of thermal runaway events was proportionately represented in both training and testing sets.
-
-During data preparation, features were selected and preprocessed to ensure they were suitable for modeling. I paid particular attention to important hyperparameters such as `max\_depth` and `min\_samples\_leaf` when training the Decision Tree, configuring it to avoid overfitting while retaining meaningful splits. Each model was trained using `class\_weight='balanced'`, critical given the dataset’s class imbalance.
-
-For model evaluation, I calculated various metrics, notably ROC-AUC scores, facilitating a comprehensive understanding of the models' performance across different settings. I visualized the results through ROC curves and feature importance plots, allowing for interpretation of each algorithm's predictions and identifying key predictors that influence outcomes.
-
-Subsequent comparisons of model performance emphasized the advantages of Random Forests in predictive accuracy. The process culminated with aggregating insights into a clear predictive framework for both thermal runaway prediction and wafer yield analysis.
+I load and preprocess data, ensuring stratified splits. I train Decision Trees and Random Forests, then evaluate them using ROC-AUC metrics.
 
 %% ── RESULTS (images mixed in) ──────────────────────────────────────────────
 \section{Results}
 
-Random Forest consistently outperformed the Decision Tree across several metrics, with an AUC close to one, indicating a high level of model confidence. The Decision Tree model, while interpretable, exhibited issues with overfitting, particularly evident in its lower AUC score. The ensemble nature of Random Forest effectively reduced variance, resulting in superior generalization to unseen data compared to the single Decision Tree. It became evident that while individual trees excel in interpretability, the averaging method in Random Forest provides a remarkable balance of accuracy and reliability, particularly in rare-event scenarios like thermal runaway.
-
-Importantly, the findings highlighted critical predictor variables in both datasets, delineating how certain conditions, whether environmental or spatial, directly influenced the outcomes. This insight not only validates the model's performance but also facilitates informed decision-making in both battery management and semiconductor fabrication processes.
+The Random Forest model outperformed the Decision Tree, achieving exceptionally high AUC scores. This shows that averaging predictions across multiple trees reduces overfitting, especially in the presence of class imbalance.
 
 \vspace{4pt}
 
@@ -195,16 +175,18 @@ Importantly, the findings highlighted critical predictor variables in both datas
   \toprule
   \rowcolor{tableheader} Metric & Value \\
   \midrule
-  \rowcolor{white} ROC-AUC & 0.9940 \\
-  \rowcolor{tablerow} ROC-AUC Random Forest & 1.0000 \\
-  \rowcolor{white} ROC-AUC Decision Tree & 0.7570 \\
-  \rowcolor{tablerow} ROC-AUC Wafer Yield & 0.7690 \\
+  \rowcolor{white} AUC & 0.9930 \\
+  \rowcolor{tablerow} AUC & 0.9940 \\
+  \rowcolor{white} AUC & 1.0000 \\
+  \rowcolor{tablerow} AUC & 0.9990 \\
+  \rowcolor{white} AUC & 0.7570 \\
+  \rowcolor{tablerow} AUC & 0.7690 \\
   \bottomrule
 \end{tabularx}
 
 \vspace{4pt}
 \begin{resultbox}
-  \textbf{\color{accent}Best Result}\quad {\bfseries\color{metricgreen}Best ROC-AUC = 0.9940 on EV Battery dataset}
+  \textbf{\color{accent}Best Result}\quad {\bfseries\color{metricgreen}AUC = 1.0000}
 \end{resultbox}
 
 \vspace{6pt}
@@ -289,12 +271,10 @@ Importantly, the findings highlighted critical predictor variables in both datas
   \includegraphics[width=\linewidth]{/Users/rajendarmuddasani/AIML/55_LinkedIn/003_tree_based_learning/assets/feature_importance_ev.png}
 \end{figure}
 
-The visualizations included in this report provide valuable insight into the decision-making processes of the models. The decision tree structure diagram elucidates how the model arrives at a binary classification via easy-to-understand IF-THEN rules. The wafer map visualization juxtaposes actual and predicted yield outcomes, illustrating the model’s capacity to capture complex spatial patterns inherent in the data. Additionally, the feature importance chart sheds light on which variables are most instrumental in driving predictions, affirming the model's practical applicability in real-world scenarios.
+Visuals illustrate the decision tree structure, actual vs predicted yield maps, and feature importance across the datasets.
 
-%% ── DEPLOYMENT & TECH STACK ────────────────────────────────────────────────
-\section{Deployment \& Tech Stack}
-
-To facilitate deployment, I packaged the code within a structured directory, allowing for easy access to datasets, notebooks, and source scripts. This organization ensures any practitioner can replicate the study, adapt the models for similar datasets, and understand the underlying processes through detailed documentation. I utilized Jupyter notebooks to provide an interactive environment for analysis, which supports educational purposes alongside practical implementations.
+%% ── TECH STACK & KEY LEARNINGS ──────────────────────────────────────────────
+\section{Tech Stack \& Key Learnings}
 
 \begin{tabularx}{\linewidth}{@{}>{\bfseries}l X @{}}
   \arrayrulecolor{tableheader}
@@ -307,13 +287,11 @@ To facilitate deployment, I packaged the code within a structured directory, all
   \bottomrule
 \end{tabularx}
 
-%% ── KEY LEARNINGS ──────────────────────────────────────────────────────────
-\section{Key Learnings}
-
-\begin{itemize}[leftmargin=18pt,itemsep=3pt]
-  \item The capability of Decision Trees to provide human-readable insights into model predictions is invaluable, particularly for explaining decisions to non-technical stakeholders.
-  \item Random Forests successfully address the issue of overfitting encountered in individual trees through ensemble methods, making them more robust for predicting rare events.
-  \item Feature importance metrics serve as a powerful tool for domains where understanding the influence of predictors is crucial, guiding future experiments and operational decisions.
+\vspace{4pt}
+\begin{itemize}[leftmargin=18pt,itemsep=2pt]
+  \item Ensemble methods greatly reduce overfitting risks.
+  \item Decision Trees provide transparent rule-based predictions.
+  \item Addressing class imbalance is vital for rare-event predictions.
 \end{itemize}
 
 \end{document}
