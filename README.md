@@ -1,19 +1,19 @@
-# Post 003 — Tree-Based Learning: Decision Trees & Random Forests
-
-**AI Engineering Lab Series** | Era 1: Classic Machine Learning
+# Tree-Based Learning: Decision Trees & Random Forests
 
 ---
 
 ## Overview
 
-This project demonstrates **Decision Trees** and **Random Forests** applied to two real-world prediction problems. The goal is to show how tree-based models learn non-linear, multi-condition rules — and why averaging many trees (ensemble learning) dramatically outperforms a single tree.
+This project demonstrates **Decision Trees** and **Random Forests** applied to two real-world prediction problems. Starting with Gini impurity and information gain, it progresses through recursive partitioning, pruning via hyperparameters, and the transition from a single tree to a bagged Random Forest ensemble with feature subsampling.
+
+The same pipeline is applied to two independent datasets from entirely different domains, demonstrating that tree-based models generalize across problems.
 
 | Concept | Description |
-|---|---|
+|:---|:---|
 | **Decision Tree** | Learns human-readable IF-THEN rules by recursively splitting data on feature thresholds |
 | **Random Forest** | Builds hundreds of trees on random data/feature subsets; majority vote reduces variance |
 | **Feature Importance** | Measures how much each feature reduces impurity across all trees |
-| **Class Imbalance** | Handled via `class_weight='balanced'` and evaluated with ROC-AUC, not accuracy |
+| **Class Imbalance** | Handled via stratified splitting and evaluated with precision, recall, F1 |
 | **Ensemble Principle** | Many weak learners combined outperform one strong learner; errors cancel out |
 
 ---
@@ -21,57 +21,64 @@ This project demonstrates **Decision Trees** and **Random Forests** applied to t
 ## Datasets
 
 ### Dataset A: EV Battery Thermal Runaway Prediction
-Predicts whether a lithium-ion battery will experience thermal runaway (fire) based on charging and environmental conditions.
 
-| Feature | Description |
-|---|---|
-| `charge_rate_kw` | Power delivered during charging (kW) |
-| `ambient_temp_c` | Environment temperature (°C) |
-| `cooling_flow_rate` | Coolant flow through the battery pack (L/min) |
-| `cell_voltage_variance` | Voltage spread across cells (imbalance indicator) |
-| `age_cycles` | Number of charge/discharge cycles completed |
-| **`thermal_runaway`** | **Target: 1 = Fire, 0 = Safe** |
+A synthetic dataset of 8,000 battery telemetry records. The task is to predict whether a lithium-ion battery will experience thermal runaway (fire) based on charging and environmental conditions including charge_rate_kw, ambient_temp_c, cooling_flow_rate, cell_voltage_variance, and age_cycles.
 
-- **Rows:** 8,000 | **Fire rate:** ~5% (severe class imbalance)
-- **Why novel:** Teaches rare-event prediction with a universally understood physical scenario
+The dataset is heavily imbalanced (95% safe, 5% thermal runaway), requiring stratified splitting and careful evaluation using precision, recall, and confusion matrices.
 
 ### Dataset B: Wafer Edge Yield Drop-off (Post-Silicon Validation)
-Predicts whether a die on a silicon wafer will pass or fail yield testing, based on its spatial position and process parameters.
 
-| Feature | Description |
-|---|---|
-| `distance_from_center_mm` | Radial distance from wafer center (mm) |
-| `angle_degrees` | Angular position on the wafer (degrees) |
-| `etch_gas_flow` | Gas flow rate during etch step (sccm) |
-| `spin_coat_rpm` | Spin speed during photoresist coating (RPM) |
-| `litho_overlay_error_nm` | Misalignment between lithography layers (nm) |
-| **`yield_pass`** | **Target: 1 = Pass, 0 = Fail** |
+A synthetic dataset of 10,000 wafer die measurements. The task is to predict whether a die passes or fails yield testing based on its spatial position and process parameters including distance_from_center_mm, angle_degrees, etch_gas_flow, spin_coat_rpm, and litho_overlay_error_nm.
 
-- **Rows:** 10,000 | **Pass rate:** ~90% (edge dies fail at higher rate)
-- **Why novel:** The non-linear edge drop-off pattern is a canonical semiconductor manufacturing problem
+The 90/10 class split makes minority-class (fail) detection challenging, and the spatial nature of the data introduces domain-specific visualization opportunities.
 
 ---
 
-## Project Structure
+## Repository Structure
 
 ```
 003_tree_based_learning/
+├── assets/                                        # All notebook-generated visualizations
+│   ├── proj1_battery_eda.png                      # Battery: feature distributions (Safe vs Runaway)
+│   ├── proj1_battery_decision_tree.png            # Battery: trained Decision Tree with Gini splits
+│   ├── proj1_battery_tree_structure.png           # Battery: detailed tree structure + split thresholds
+│   ├── proj1_battery_feature_importance.png       # Battery: Random Forest feature importance
+│   ├── proj1_battery_feature_importance_both.png  # Battery: DT vs RF importance comparison
+│   ├── proj1_battery_model_comparison.png         # Battery: DT vs RF performance metrics
+│   ├── proj1_battery_roc_comparison.png           # Battery: ROC curves DT vs RF
+│   ├── proj1_battery_model_heatmap.png            # Battery: confusion matrix heatmap
+│   ├── proj1_battery_3d_features.png              # Battery: 3D feature space scatter
+│   ├── proj1_battery_3d_decision_surface.png      # Battery: 3D DT decision surface
+│   ├── proj1_battery_ensemble_intuition.png       # Battery: bagging + subsampling intuition
+│   ├── proj1_battery_flowchart.png                # Battery: AI-generated pipeline flowchart
+│   ├── proj2_wafer_map_analysis.png               # Wafer: actual pass/fail spatial distribution
+│   ├── proj2_wafer_feature_analysis.png           # Wafer: feature distributions + correlations
+│   ├── proj2_wafer_actual_vs_predicted.png        # Wafer: actual vs predicted wafer maps
+│   ├── proj2_wafer_predicted_map.png              # Wafer: model-predicted yield map
+│   ├── proj2_wafer_3d_spatial.png                 # Wafer: 3D spatial features scatter
+│   └── proj2_wafer_flowchart.png                  # Wafer: AI-generated pipeline flowchart
 ├── data/
-│   ├── ev_battery_thermal_runaway.csv
-│   └── wafer_edge_yield.csv
+│   ├── ev_battery_thermal_runaway.csv             # 8,000 battery records (5 features + target)
+│   └── wafer_edge_yield.csv                       # 10,000 wafer die records (5 features + target)
+├── deploy/
+│   ├── Dockerfile                                 # Container image for FastAPI server
+│   └── docker-compose.yml                         # Single-command deployment
+├── docs/
+│   ├── Tree_Based_Learning_Report.html            # Report source (HTML with embedded images)
+│   └── Tree_Based_Learning_Report.pdf             # Final PDF report (both projects)
+├── models/
+│   ├── rf_battery.pkl                             # Trained RandomForest for battery (Acc = 0.9994)
+│   └── rf_wafer.pkl                               # Trained RandomForest for wafer (Acc = 0.8975)
 ├── notebooks/
-│   ├── 01_tree_based_ev_battery.ipynb
-│   └── 02_tree_based_wafer_yield.ipynb
+│   ├── 01_tree_based_ev_battery.ipynb             # Full pipeline: EDA → DT → RF → metrics → 3D
+│   └── 02_tree_based_wafer_yield.ipynb            # Wafer: spatial analysis → DT → RF → wafer maps
 ├── src/
-│   ├── data_generator.py
-│   └── generate_visuals.py
-├── assets/
-│   ├── fig1_decision_tree_structure.png
-│   ├── fig2_wafer_map_actual_vs_predicted.png
-│   ├── fig3_feature_importance_both.png
-│   ├── fig4_roc_comparison.png
-│   └── fig5_ensemble_intuition.png
-├── PRD.md
+│   ├── train.py                                   # Train RandomForest for both datasets
+│   ├── predict.py                                 # Load model and run batch predictions
+│   ├── api.py                                     # FastAPI POST /predict endpoint
+│   └── data_generator.py                          # Generate synthetic datasets
+├── tests/
+│   └── test_model.py                              # Model existence + prediction shape tests
 ├── requirements.txt
 ├── .gitignore
 └── LICENSE
@@ -79,52 +86,50 @@ Predicts whether a die on a silicon wafer will pass or fail yield testing, based
 
 ---
 
-## Key Visualizations
+## Quick Start
 
-| Figure | Description |
-|---|---|
-| `fig1` | Decision Tree structure (first 3 levels) — human-readable IF-THEN rules |
-| `fig2` | Wafer map: actual yield vs Random Forest predicted yield probability |
-| `fig3` | Feature importance for both datasets — what physically drives failures |
-| `fig4` | ROC curves comparing Decision Tree vs Random Forest on both datasets |
-| `fig5` | Ensemble intuition — why averaging many trees reduces variance |
+```bash
+# Clone
+git clone https://github.com/AIML-Engineering-Lab/003_tree_based_learning.git
+cd 003_tree_based_learning
+pip install -r requirements.txt
+
+# Generate datasets
+python3 src/data_generator.py
+
+# Open notebooks
+jupyter notebook notebooks/
+
+# Train models and save artifacts (both datasets)
+python3 src/train.py
+
+# Run predictions
+python3 src/predict.py
+
+# Start API server
+uvicorn src.api:app --host 0.0.0.0 --port 8000
+
+# Run tests
+python3 tests/test_model.py
+```
 
 ---
 
 ## Tech Stack
 
 | Tool | Version | Purpose |
-|---|---|---|
-| Python | 3.11 | Core language |
-| scikit-learn | ≥1.3 | Decision Tree, Random Forest, metrics |
-| pandas | ≥2.0 | Data manipulation |
-| numpy | ≥1.24 | Numerical operations |
-| matplotlib | ≥3.7 | All visualizations |
-| seaborn | ≥0.12 | Statistical plots |
+|:---|:---|:---|
+| Python | 3.12+ | Core language |
+| NumPy | 1.24+ | Numerical operations |
+| Pandas | 2.0+ | Data manipulation |
+| scikit-learn | 1.3+ | DecisionTreeClassifier, RandomForestClassifier, metrics, CV |
+| Matplotlib | 3.7+ | All visualizations including 3D |
+| Seaborn | 0.12+ | Statistical plots, heatmaps |
+| FastAPI | 0.100+ | REST API serving |
+| Joblib | 1.3+ | Model serialization |
 
 ---
 
-## Quick Start
+## License
 
-```bash
-git clone https://github.com/AIML-Engineering-Lab/003_tree_based_learning.git
-cd 003_tree_based_learning
-pip install -r requirements.txt
-python src/data_generator.py
-jupyter notebook notebooks/
-```
-
----
-
-## Series Navigation
-
-| Post | Topic | Repo |
-|---|---|---|
-| 001 | Linear Regression Engine | [001_linear_regression_engine](https://github.com/AIML-Engineering-Lab/001_linear_regression_engine) |
-| 002 | Classification Engine | [002_classification_engine](https://github.com/AIML-Engineering-Lab/002_classification_engine) |
-| **003** | **Tree-Based Learning** | **This repo** |
-| 004 | The Boosting Revolution | Coming soon |
-
----
-
-*Part of the [AI Engineering Lab](https://github.com/AIML-Engineering-Lab) series — a progressive curriculum from Classic ML to Agentic AI, grounded in real engineering problems.*
+MIT License. See [LICENSE](LICENSE) for details.
