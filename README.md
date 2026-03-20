@@ -130,6 +130,22 @@ python3 tests/test_model.py
 
 ---
 
+## Architecture
+
+```mermaid
+graph LR
+    A[CSV Data] --> B[StandardScaler]
+    B --> C[DecisionTreeClassifier]
+    B --> D[RandomForestClassifier]
+    C --> E[Evaluation & CV]
+    D --> E
+    E --> F[joblib Export]
+    F --> G[FastAPI /predict]
+    B --> H[Feature Importance + 3D Plots]
+```
+
+---
+
 ## License
 
 MIT License. See [LICENSE](LICENSE) for details.
